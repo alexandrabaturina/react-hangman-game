@@ -1,6 +1,4 @@
-export const HangmanWord = () => {
-	const word = "test"
-	const guessedLetters = ["e"]
+export const HangmanWord = ({ guessedLetters, wordToGuess }) => {
 	return (
 		<div
 			style={{
@@ -12,7 +10,7 @@ export const HangmanWord = () => {
 				fontFamily: "monospace",
 			}}
 		>
-			{word.split("").map((letter, index) => (
+			{wordToGuess.split("").map((letter, index) => (
 				<span style={{ borderBottom: ".1em solid black" }} key={index}>
 					<span
 						style={{

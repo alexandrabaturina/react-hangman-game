@@ -1,5 +1,5 @@
 import "./App.css"
-import { useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import words from "./wordList.json"
 import { HangmanDrawing } from "./components/HangmanDrawing"
 import { HangmanWord } from "./components/HangmanWord"
@@ -16,6 +16,32 @@ const App = () => {
 	const incorrectLetters = guessedLetters.filter(
 		(letter) => !wordToGuess.includes(letter)
 	)
+
+	const addGuessedLetter = useCallback(
+		(letter) => {
+			if (guessedLetters.includes(letter)) return
+
+			setGuessedLetters((currentLetters) => [...currentLetters, letter])
+		},
+		[guessedLetters]
+	)
+
+	// Read letters from PC keyboard
+	useEffect(() => {
+		const handler = (e) => {
+			const key = e.key
+			if (!key.match(/^[a-z]$/)) return
+
+			e.preventDefault()
+			addGuessedLetter(key)
+		}
+
+		document.addEventListener("keypress", handler)
+
+		return () => {
+			document.removeEventListener("keypress", handler)
+		}
+	}, [guessedLetters])
 
 	return (
 		<div
@@ -37,7 +63,7 @@ const App = () => {
 				Lose Win
 			</div>
 			<HangmanDrawing numberOfGuesses={incorrectLetters.length} />
-			<HangmanWord />
+			<HangmanWord guessedLetters={guessedLetters} wordToGuess={wordToGuess} />
 			<div style={{ alignSelf: "stretch" }}>
 				<Keyboard />
 			</div>
