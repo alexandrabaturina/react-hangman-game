@@ -5,11 +5,11 @@ import { HangmanDrawing } from "./components/HangmanDrawing"
 import { HangmanWord } from "./components/HangmanWord"
 import { Keyboard } from "./components/Keyboard"
 
+const getWord = () => words[Math.floor(Math.random() * words.length)]
+
 const App = () => {
 	// Get random word from the list
-	const [wordToGuess, setWordToGuess] = useState(() => {
-		return words[Math.floor(Math.random() * words.length)]
-	})
+	const [wordToGuess, setWordToGuess] = useState(getWord)
 
 	const [guessedLetters, setGuessedLetters] = useState([])
 
@@ -39,6 +39,24 @@ const App = () => {
 
 			e.preventDefault()
 			addGuessedLetter(key)
+		}
+
+		document.addEventListener("keypress", handler)
+
+		return () => {
+			document.removeEventListener("keypress", handler)
+		}
+	}, [guessedLetters])
+
+	// Refresh page automatically
+	useEffect(() => {
+		const handler = (e) => {
+			const key = e.key
+			if (key !== "Enter") return
+
+			e.preventDefault()
+			setGuessedLetters([])
+			setWordToGuess(getWord())
 		}
 
 		document.addEventListener("keypress", handler)
