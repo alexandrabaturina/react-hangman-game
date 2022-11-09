@@ -33,6 +33,7 @@ export const Keyboard = ({
 	activeLetters,
 	inactiveLetters,
 	addGuessedLetter,
+	disabled = false,
 }) => {
 	return (
 		<div
@@ -52,7 +53,7 @@ export const Keyboard = ({
 						className={`btn ${isActive ? `active` : ``} ${
 							isInactive ? `inactive` : ``
 						}`}
-						disabled={isInactive || isActive}
+						disabled={isInactive || isActive || disabled}
 					>
 						{key}
 					</button>
